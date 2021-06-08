@@ -26,6 +26,7 @@ data Borders = Borders {normal :: Color, focused :: Color}
 
 data Theme = Theme
   { text :: Color,
+    background :: Color,
     focus :: Color,
     hidden :: Color,
     title :: Color,
@@ -46,6 +47,7 @@ convertBorders def_normal def_focused = Borders <$> fetchWithDefault def_normal 
 convertTheme :: ReaderT (I.ColorSpec, I.Theme) (Either String) Theme
 convertTheme = local (second I.applyUsings) $ do
   text_col <- fetch I.text
+  bg_col <- fetch I.background
   focus_col <- fetch I.focus
   hidden_col <- fetchWithDefault text_col I.hidden
   urgent_col <- fetchWithDefault text_col I.urgent
@@ -53,7 +55,7 @@ convertTheme = local (second I.applyUsings) $ do
 
   borders <- withReaderT (second I.bordersOrDefault) $ convertBorders hidden_col text_col
 
-  return $ Theme text_col focus_col hidden_col title_col urgent_col borders
+  return $ Theme text_col bg_col focus_col hidden_col title_col urgent_col borders
 
 instance FromJSON Theme where
   parseJSON = withObject "color theme" $ \v -> do
@@ -76,5 +78,3 @@ fetchThemeWithCustomDir name themes_dir = runExceptT $ do
 
 fetchTheme :: String -> IO (Either String Theme)
 fetchTheme name = getThemesDir >>= fetchThemeWithCustomDir name
-
-

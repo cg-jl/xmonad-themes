@@ -67,6 +67,7 @@ instance FromJSON Borders
 data Theme = Theme
   { uses :: Maybe Text, -- brings into scope a particular subset. useful for changing fast from "light" to "dark" themes and so.
     text :: ThemeAccessor, -- normal text color.
+    background :: ThemeAccessor, -- background color.
     hidden :: Maybe ThemeAccessor, -- color for hidden workspaces. defaultd to `text`.
     title :: Maybe ThemeAccessor, -- window title. defaulted to `text`.
     urgent :: Maybe ThemeAccessor, -- color for urgent workspaces. defaulted to `text`.
@@ -85,9 +86,9 @@ usingBorders :: Text -> Borders -> Borders
 usingBorders t (Borders normal focused) = Borders (using t <$> normal) (using t <$> focused)
 
 applyUsings :: Theme -> Theme
-applyUsings t@(Theme uses text hidden title urgent focus borders) = maybe t applyUses uses
+applyUsings t@(Theme uses text bg hidden title urgent focus borders) = maybe t applyUses uses
   where
-    applyUses k = Theme Nothing (using k text) (using k <$> hidden) (using k <$> title) (using k <$> urgent) (using k focus) (usingBorders k <$> borders)
+    applyUses k = Theme Nothing (using k text) (using k bg) (using k <$> hidden) (using k <$> title) (using k <$> urgent) (using k focus) (usingBorders k <$> borders)
 
 access :: ThemeAccessor -> ReaderT ColorSpec (Either String) Color
 access (Simple k) = do
