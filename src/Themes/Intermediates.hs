@@ -73,6 +73,7 @@ data Theme = Theme
     title :: Maybe ThemeAccessor, -- window title. defaulted to `text`.
     urgent :: Maybe ThemeAccessor, -- color for urgent workspaces. defaulted to `text`.
     focus :: ThemeAccessor, -- focus color.
+    separators :: Maybe ThemeAccessor,
     borders :: Maybe Borders
   }
   deriving (Generic, Show)
@@ -87,9 +88,9 @@ usingBorders :: Text -> Borders -> Borders
 usingBorders t (Borders normal focused) = Borders (using t <$> normal) (using t <$> focused)
 
 applyUsings :: Theme -> Theme
-applyUsings t@(Theme uses text bg hidden title urgent focus borders) = maybe t applyUses uses
+applyUsings t@(Theme uses text bg hidden title urgent focus seps borders) = maybe t applyUses uses
   where
-    applyUses k = Theme Nothing (using k text) (using k bg) (using k <$> hidden) (using k <$> title) (using k <$> urgent) (using k focus) (usingBorders k <$> borders)
+    applyUses k = Theme Nothing (using k text) (using k bg) (using k <$> hidden) (using k <$> title) (using k <$> urgent) (using k focus) (using k <$> seps) (usingBorders k <$> borders)
 
 access :: ThemeAccessor -> ReaderT ColorSpec (Either String) Color
 access (Direct c) = return c

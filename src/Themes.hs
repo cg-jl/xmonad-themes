@@ -32,6 +32,7 @@ data Theme = Theme
     hidden :: Color,
     title :: Color,
     urgent :: Color,
+    separators :: Color,
     borders :: Borders
   }
   deriving (Show, Eq)
@@ -53,10 +54,11 @@ convertTheme = local (second I.applyUsings) $ do
   hidden_col <- fetchWithDefault text_col I.hidden
   urgent_col <- fetchWithDefault text_col I.urgent
   title_col <- fetchWithDefault text_col I.title
+  seps_col <- fetchWithDefault text_col I.separators
 
   borders <- withReaderT (second I.bordersOrDefault) $ convertBorders hidden_col text_col
 
-  return $ Theme text_col bg_col focus_col hidden_col title_col urgent_col borders
+  return $ Theme text_col bg_col focus_col hidden_col title_col urgent_col seps_col borders
 
 instance FromJSON Theme where
   parseJSON = withObject "color theme" $ \v -> do

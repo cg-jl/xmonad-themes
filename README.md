@@ -154,6 +154,7 @@ The theme specification has the following keys and values:
 - `hidden` : theme accessor, optional, used for hidden workspaces. Defaults to `text`.
 - `title` : theme accessor, optional, used primarily for the window title. Defaults to `text`.
 - `urgent` : theme accessor, optional, used for urgent workspaces. Defaults to `text`.
+- `separators` : theme accessor, optional, defaulted to `text`.
 - `borders` : optional, used for window borders. Specififed through the following keys:
   - `normal` : theme accessor, optional, defaults to `hidden`.
   - `focused` : theme accessor, optional, defaults to `focused`.
