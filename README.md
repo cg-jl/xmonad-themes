@@ -26,11 +26,15 @@ main :: IO ()
 
 This library is meant to be used along with a stack/cabal XMonad build, as you'll only need to add this library as a package.
 
-<!-- Clone the library, inside your xmonad build:
+Clone the library, inside your xmonad build:
 ```bash
 git clone https://github.com/CyberGsus/xmonad-themes
 ```
- -->
+
+Then, add it as a package to your `stack.yml`. (i.e, the `packages` key).
+
+Last, execute a `stack build` to check everything's fine.
+
 
 
 The library (`Themes`) exports a couple functions which you can use:
