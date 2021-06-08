@@ -3,6 +3,7 @@
 module Themes
   ( colorString,
     colorText,
+    defaultTheme,
     Theme (..),
     Borders (..),
     fetchTheme,
@@ -15,6 +16,7 @@ import Control.Monad.Trans.Except
 import Data.Aeson
 import Data.Bifunctor
 import Data.ByteString as B
+import Data.Either
 import Data.Maybe
 import System.Directory
 import System.FilePath
@@ -81,3 +83,25 @@ fetchThemeWithCustomDir themes_dir name = runExceptT $ do
 
 fetchTheme :: String -> IO (Either String Theme)
 fetchTheme name = getThemesDir >>= (`fetchThemeWithCustomDir` name)
+
+defaultTheme :: Theme
+defaultTheme =
+  let cspec =
+        I.Single $
+          ColorSet
+            { black = "#000000",
+              blue = "#0000ff",
+              cyan = "#00ffff",
+              green = "#00ff00",
+              magenta = "#ff00ff",
+              red = "#ff0000",
+              white = "#ffffff",
+              yellow = "#ffff00"
+            }
+      tspec = I.Theme Nothing (I.Simple "black") (I.Simple "white") Nothing Nothing Nothing (I.Simple "white") Nothing Nothing
+   in fromRight (error "default theme can't be parsed??") $
+        runReaderT
+          convertTheme
+          ( cspec,
+            tspec
+          )

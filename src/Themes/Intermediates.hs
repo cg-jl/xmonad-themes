@@ -5,7 +5,7 @@ module Themes.Intermediates
   ( Theme (..),
     Borders (..),
     ColorSpec (..),
-    ThemeAccessor,
+    ThemeAccessor (..),
     applyUsings,
     accessWith,
     defaultedWith,
