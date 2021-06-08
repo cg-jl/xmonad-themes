@@ -22,6 +22,7 @@ import Themes.Color
 import qualified Themes.Intermediates as I
 
 data Borders = Borders {normal :: Color, focused :: Color}
+  deriving (Show, Eq)
 
 data Theme = Theme
   { text :: Color,
@@ -31,6 +32,7 @@ data Theme = Theme
     urgent :: Color,
     borders :: Borders
   }
+  deriving (Show, Eq)
 
 fetchWithDefault :: Color -> (a -> Maybe I.ThemeAccessor) -> ReaderT (I.ColorSpec, a) (Either String) Color
 fetchWithDefault def_col access_fn = asks (access_fn . snd) >>= I.defaultedWith fst def_col

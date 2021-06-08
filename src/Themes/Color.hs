@@ -10,7 +10,7 @@ import Data.Text
 import GHC.Generics
 import Prelude hiding (all, length)
 
-newtype Color = Color {unColor :: Text}
+newtype Color = Color {unColor :: Text} deriving (Eq)
 
 instance IsString Color where
   {-# INLINE fromString #-}

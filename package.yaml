@@ -45,3 +45,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - xmonad-themes
+    - hspec
+    - hspec-contrib

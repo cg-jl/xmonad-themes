@@ -61,6 +61,8 @@ test-suite xmonad-themes-test
     , containers
     , directory
     , filepath
+    , hspec
+    , hspec-contrib
     , mtl
     , text
     , transformers
