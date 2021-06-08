@@ -141,6 +141,7 @@ So these are valid examples of a color specification:
 I will be mentioning the term *theme accessors* so I'll define it. A *theme accessor* is a value which has one of the two following structures:
 
 - A string, meaning a key like `"black"` or `"white"`, useful when the color specification contains just one color set or when the `uses` key was specified (explained later).
+- A string, with the structure of a color. Uses the color directly.
 - An array consisting of a tuple with ONLY two values: `[subset, color_key]`, where `subset` is the subset name from the color specification and `color_key` is a string with the corresponding color name (`black`, `blue`, etc.).
   If there are no subsets as only one color set was specified, then the subset key is ignored. If the subset mentioned doesn't exist it will error out.
 

@@ -39,12 +39,13 @@ instance FromJSON ColorSpec where
       parseWithKey (k, v) = includeFst (k, parseJSON v)
       includeFst (a, fb) = (a,) <$> fb
 
-data ThemeAccessor = Simple Text | WithSubSet (Text, Text)
+data ThemeAccessor = Simple Text | WithSubSet (Text, Text) | Direct Color
   deriving (Show)
 
 instance FromJSON ThemeAccessor where
-  parseJSON v = simple v <|> wsubset v
+  parseJSON v = color v <|> simple v <|> wsubset v
     where
+      color = fmap Direct . parseJSON
       simple = withText "simple theme accessor" (return . Simple)
       wsubset = withArray "key tuple" $ \vec ->
         if V.length vec /= 2
@@ -91,6 +92,7 @@ applyUsings t@(Theme uses text bg hidden title urgent focus borders) = maybe t a
     applyUses k = Theme Nothing (using k text) (using k bg) (using k <$> hidden) (using k <$> title) (using k <$> urgent) (using k focus) (usingBorders k <$> borders)
 
 access :: ThemeAccessor -> ReaderT ColorSpec (Either String) Color
+access (Direct c) = return c
 access (Simple k) = do
   t <- ask
   case t of
