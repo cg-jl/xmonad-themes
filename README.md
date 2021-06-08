@@ -1,5 +1,6 @@
 # xmonad-themes
 
+
 A little library to manage custom themes using JSON.
 The themes format is inspired by the way xmonad colors are customized, and the alacritty coloring format.
 I decided to go like this as it will be easier to port the colors copying them directly from your alacritty config and then you only have
@@ -20,6 +21,12 @@ main :: IO ()
   theme_result <- fetchTheme "gruvbox"
   -- do stuff with theme_result
 ```
+
+## Table of contents
+
+- [Usage](#Usage)
+- [Xmonad example](#xmonad-example)
+- [Theme format](#theme-format)
 
 
 ## Usage
@@ -70,6 +77,65 @@ fetchThemeWithCustomDir :: FilePath -> String -> IO (Either String Theme)
 ```
 This one does the same as the last one except it uses a custom theme folder as the **first** argument.
 
+## Xmonad Example
+
+I managed to make my library work with XMonad, here's some of the code:
+
+```hs
+import           System.IO (hPutStrLn, stderr)
+import           Themes
+
+-- helper
+putsErr :: String -> IO ()
+putsErr = hPutStrLn stderr
+
+themeName :: String
+themeName = "nord" -- If you want the theme, go see it in my dotfiles under .xmonad/themes!
+
+getTheme :: IO Theme
+getTheme = do
+  let logAndDefault err = do
+        putsErr $ "XMonad (theme) : Couldn't load theme " ++ show themeName ++ ": " ++ err
+        putsErr "XMonad (theme) : Resorting to default theme (ugly, duh)."
+        return defaultTheme
+
+  theme_res <- fetchTheme themeName
+  either logAndDefault return theme_res
+
+
+main :: IO ()
+main = do
+  theme <- getTheme
+  let themeColor = (`colorString` theme)
+
+  xmonad $ ewmh def {
+          -- ...
+          normalBorderColor = themeColor (normal . borders),
+          focusedBorderColor = themeColor (focused . borders),
+          logHook =
+            workspaceHistoryHook
+              <+> dynamicLogWithPP
+                xmobarPP
+                  { ppOutput = hPutStrLn xmobarPipe,
+                    -- Current workspace in xmobar
+                    ppCurrent = xmobarColor (themeColor Themes.focus) "" . mkWrap,
+                    -- Visible but not current workspace
+                    ppVisible = xmobarColor "#81a1c1" "" . mkWrap,
+                    -- Hidden workspaces in xmobar
+                    ppHidden = xmobarColor (themeColor hidden) "" . mkWrap,
+                    -- Hidden workspaces (no windows)
+                    ppHiddenNoWindows = xmobarColor (themeColor hidden) "" . mkWrap,
+                    -- Title of active window in xmobar
+                    ppTitle = xmobarColor (themeColor Themes.title) "" . shorten 55,
+                    -- Separators in xmobar
+                    ppSep = "<fc=" ++ themeColor separators ++ "> :: </fc>",
+                    -- Urgent workspace
+                   ppUrgent = xmobarColor (themeColor urgent) ""
+                    -- ...
+            }
+    }
+```
+For the complete file, make sure to take a look at [my dotfiles](https://github.com/CyberGsus/dotfiles/blob/main/.xmonad/xmonad.hs)!
 
 ## Theme Format
 
