@@ -2,6 +2,7 @@
 
 module Themes
   ( colorString,
+    colorText,
     Theme (..),
     Borders (..),
     fetchTheme,
@@ -69,12 +70,12 @@ getThemesDir = do
   home <- getHomeDirectory
   return $ home </> ".xmonad" </> "themes"
 
-fetchThemeWithCustomDir :: String -> FilePath -> IO (Either String Theme)
-fetchThemeWithCustomDir name themes_dir = runExceptT $ do
+fetchThemeWithCustomDir :: FilePath -> String -> IO (Either String Theme)
+fetchThemeWithCustomDir themes_dir name = runExceptT $ do
   let theme_path = themes_dir </> name <.> "json"
   file_exists <- lift $ doesFileExist theme_path
   unless file_exists $ throwE $ "Sorry, but theme " ++ show name ++ " is not currently saved at " ++ show themes_dir
   ExceptT $ eitherDecodeFileStrict theme_path
 
 fetchTheme :: String -> IO (Either String Theme)
-fetchTheme name = getThemesDir >>= fetchThemeWithCustomDir name
+fetchTheme name = getThemesDir >>= (`fetchThemeWithCustomDir` name)

@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Themes.Color (Color (..), ColorSet (..), colorString, selectColor) where
+module Themes.Color (Color (..), ColorSet (..), colorString, colorText, selectColor) where
 
 import Data.Aeson
 import Data.Char
@@ -48,6 +48,10 @@ instance FromJSON ColorSet
 colorString :: (a -> Color) -> a -> String
 {-# INLINEABLE colorString #-}
 colorString = (show .)
+
+colorText :: (a -> Color) -> a -> Text
+{-# INLINABLE colorText #-}
+colorText  = (unColor .)
 
 selectColor :: Text -> ColorSet -> Either String Color
 selectColor "black" = return . black
