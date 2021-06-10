@@ -135,7 +135,7 @@ main = do
             }
     }
 ```
-For the complete file, make sure to take a look at [my dotfiles](https://github.com/CyberGsus/dotfiles/blob/main/.xmonad/xmonad.hs)!
+For the complete file, make sure to take a look at [my dotfiles](https://github.com/CyberGsus/dotfiles/blob/main/.xmonad)!
 
 ## Theme Format
 
