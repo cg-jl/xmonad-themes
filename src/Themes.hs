@@ -58,7 +58,7 @@ convertTheme = local (second I.applyUsings) $ do
   title_col <- fetchWithDefault text_col I.title
   seps_col <- fetchWithDefault text_col I.separators
 
-  borders <- withReaderT (second I.bordersOrDefault) $ convertBorders hidden_col text_col
+  borders <- withReaderT (second I.bordersOrDefault) $ convertBorders hidden_col focus_col
 
   return $ Theme text_col bg_col focus_col hidden_col title_col urgent_col seps_col borders
 
