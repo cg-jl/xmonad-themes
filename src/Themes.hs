@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Themes
@@ -24,18 +25,18 @@ import System.IO
 import Themes.Color
 import qualified Themes.Intermediates as I
 
-data Borders = Borders {normal :: Color, focused :: Color}
+data Borders = Borders {normal :: !Color, focused :: !Color}
   deriving (Show, Eq)
 
 data Theme = Theme
-  { text :: Color,
-    background :: Color,
-    focus :: Color,
-    hidden :: Color,
-    title :: Color,
-    urgent :: Color,
-    separators :: Color,
-    borders :: Borders
+  { text :: !Color,
+    background :: !Color,
+    focus :: !Color,
+    hidden :: !Color,
+    title :: !Color,
+    urgent :: !Color,
+    separators :: !Color,
+    borders :: !Borders
   }
   deriving (Show, Eq)
 
